@@ -41,10 +41,7 @@ public class Client {
                 }while(!mensagem.equals("FIM"));
                 
                
-                //lendo a mensagem enviada pelo servidor
-                mensagem = (String) entrada.readObject();
-                System.out.println("Servidor>> "+mensagem);
-            
+               
  
             saida.close();
             entrada.close();
