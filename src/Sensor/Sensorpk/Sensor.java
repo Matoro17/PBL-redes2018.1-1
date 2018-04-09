@@ -18,8 +18,6 @@ import javafx.stage.Stage;
 
 public class Sensor extends Application{
 
-
-	static Label texto;
 	
 	public static void main(String[] args) throws InterruptedException {
 		launch(args);
@@ -29,7 +27,7 @@ public class Sensor extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("sensorxml.fxml"));
 		primaryStage.setTitle("Sensor");
-		primaryStage.setScene(new Scene(root,300,275));
+		primaryStage.setScene(new Scene(root));
 		primaryStage.show();
 	}
 	

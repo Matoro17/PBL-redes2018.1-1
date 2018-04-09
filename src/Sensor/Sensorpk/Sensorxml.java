@@ -1,5 +1,6 @@
 package Sensor.Sensorpk;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,10 +13,6 @@ import java.util.ResourceBundle;
 
 public class Sensorxml implements Initializable {
 
-    public Sensorxml(){
-
-    }
-
     @FXML
     public Button mais;
     @FXML
@@ -23,16 +20,22 @@ public class Sensorxml implements Initializable {
     @FXML
     public Label labo;
 
-    public int vazao = 0, vazaoTotalHora = 0;
+    public Integer vazao = 0, vazaoTotalHora = 0,valoranterior = vazao;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
        new Thread(() -> {
+           System.out.println(vazaoTotalHora);
             while (true) {
-                labo.setText(Integer.toString(vazaoTotalHora));
+
+
                 if(vazao > 0){
                     vazaoTotalHora = vazaoTotalHora + vazao;
+                    System.out.println(vazaoTotalHora);
+                    Platform.runLater(() -> {
+                        labo.setText(Integer.toString(vazaoTotalHora));
+                    });
                 }
                 try {
                     Thread.sleep(1000);
