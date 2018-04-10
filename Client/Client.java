@@ -3,10 +3,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
  
-/**
- *
- * @author Emerson Ribeiro de Mello
- */
 public class Client {
  
     public void iniciar(String endereco, int porta) {

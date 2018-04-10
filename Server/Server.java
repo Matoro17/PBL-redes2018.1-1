@@ -5,7 +5,14 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Properties;
-import javax.mail.*;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class Server {
  
@@ -39,6 +46,10 @@ public class Server {
                         //obtendo a mensagem enviada pelo cliente
                         mensagem = (String) entrada.readUTF();
                         System.out.println("Cliente>> " + mensagem);
+                        	if(mensagem.equals("enviar email")) {
+                        		System.out.println("tentou enviar email");
+                        		enviarEmail("user","pass");
+                        	}
                         saida.writeUTF(mensagem);
                     } catch (IOException iOException) {
                         System.err.println("erro: " + iOException.toString());
@@ -50,6 +61,7 @@ public class Server {
                 saida.close();
                 entrada.close();
                 conexao.close();
+                Server.close();
  
             }
  
@@ -68,7 +80,6 @@ public class Server {
     
 	public void enviarEmail(String username, String password){
 
-
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
@@ -85,9 +96,9 @@ public class Server {
 		try {
 
 			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("from-email@gmail.com"));
+			message.setFrom(new InternetAddress("gabrielsilvadeazevedo@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse("to-email@gmail.com"));
+				InternetAddress.parse("gabrielsilvadeazevedo@gmail.com"));
 			message.setSubject("Testing Subject");
 			message.setText("Dear Mail Crawler,"
 				+ "\n\n No spam to my email, please!");
@@ -99,5 +110,6 @@ public class Server {
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
 		}
+		
 	}
 }
