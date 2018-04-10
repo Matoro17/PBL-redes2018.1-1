@@ -1,9 +1,14 @@
-/*
+package Server;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLOutput;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -14,71 +19,90 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class Server {
- 
-    public void iniciar(int porta) {
-        ObjectOutputStream saida;
-        ObjectInputStream entrada;
-        boolean sair = false;
-        String mensagem = "";
- 
-        try {
-            // criando um socket para ouvir na porta e com uma fila de tamanho 10
-            ServerSocket Server = new ServerSocket(porta, 10);
-            Socket conexao;
-            while (!sair) {
-                System.out.println("Ouvindo na porta: " + porta);
- 
-                //ficarah bloqueado aqui ate' alguem cliente se conectar
-                conexao = Server.accept();
- 
-                System.out.println("Conexao estabelecida com: " + conexao.getInetAddress().getHostAddress());
- 
-                //obtendo os fluxos de entrada e de saida
-                saida = new ObjectOutputStream(conexao.getOutputStream());
-                entrada = new ObjectInputStream(conexao.getInputStream());
- 
-                //enviando a mensagem abaixo ao cliente
-                saida.writeObject("Conexao estabelecida com sucesso...\n");
- 
-                do {//fica aqui ate' o cliente enviar a mensagem FIM
-                    try {
-                        //obtendo a mensagem enviada pelo cliente
-                        mensagem = (String) entrada.readUTF();
-                        System.out.println("Cliente>> " + mensagem);
-                        	if(mensagem.equals("enviar email")) {
-                        		System.out.println("tentou enviar email");
-                        		enviarEmail("user","pass");
-                        	}
-                        saida.writeUTF(mensagem);
-                    } catch (IOException iOException) {
-                        System.err.println("erro: " + iOException.toString());
-                    }
-                } while (!mensagem.equals("FIM"));
-                saida.writeUTF("FIM");
-                System.out.println("Conexao encerrada pelo cliente");
-                sair = true;
-                saida.close();
-                entrada.close();
-                conexao.close();
-                Server.close();
- 
+public class Server extends Thread {
+    private Socket conexaoClient;
+    private DatagramSocket conexaoSensor;
+    private byte[] buffer;
+
+    private Medicao data;
+    public Controller control = new Controller(this);
+
+
+    public static void main(String[] args) {
+
+        int porta = 47579;
+        new Thread(new Server()).start();
+
+    }
+
+    public Server(Socket sock, Controller c){
+        conexaoClient = sock;
+        control = c;
+    }
+    public Server(){
+
+    }
+
+    public void UDPServer(int port, int buffer) throws IOException {
+        this.conexaoSensor = new DatagramSocket(port);
+        this.buffer = new byte[buffer];
+    }
+
+
+    @Override
+    public void run(){
+        try{
+           //ObjectInputStream entrada = new ObjectInputStream(conexaoClient.getInputStream());
+           //ObjectOutputStream saida = new ObjectOutputStream(conexaoClient.getOutputStream());
+           UDPServer(22222,128);
+           DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+           //String a = entrada.readUTF();
+           while(true){
+               conexaoSensor.receive(packet);
+               System.out.println(new String(packet.getData(), 0, packet.getLength()));
+               String jose = new String(packet.getData(), 0, packet.getLength());
+               String[] partes = jose.split(",");
+
+
+               Medicao temp = new Medicao(partes[0],partes[1],partes[2],partes[3],partes[4],partes[5]);
+
+               System.out.println(temp.getConsumo());
+               control.addLeitura(temp);
+               if (checkConsumo(temp.getZona(),temp.getCodigo())){
+                   //enviarEmailAlerta(temp.getZona(),temp.getCodigo());
+               }
+               System.out.println(temp.getConsumo());
+           }
+       }catch (IOException e){
+
+       }
+    }
+
+    public boolean checkConsumo(int zona, int codigo){
+        HashMap<Integer, Cliente> clientes = control.getClientes().get(zona);
+        Cliente cli = clientes.get(codigo);
+        return cli.check();
+    }
+
+    public void criarConexao(Controller c, int port){
+        try{
+            ServerSocket s = new ServerSocket(port);
+            while(true){
+                System.out.println("Esperando conexão...");
+                conexaoClient = s.accept();
+                System.out.println("conected!");
+                Thread t = new Server(conexaoClient,c);
+                t.start();
             }
- 
-        } catch (Exception e) {
-            System.err.println("Erro: " + e.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("IOException: " + e);
+
         }
     }
- 
-    public static void main(String[] args) {
-        int porta = 47579;
- 
- 
-        Server s = new Server();
-        s.iniciar(porta);
-    }
-    
-	public void enviarEmail(String username, String password){
+
+    /*
+	public void enviarEmailAlerta(int zona,int codigo){//codigo do cliente que precisa ser notificado
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -111,5 +135,5 @@ public class Server {
 			throw new RuntimeException(e);
 		}
 		
-	}
-}*/
+	}*/
+}

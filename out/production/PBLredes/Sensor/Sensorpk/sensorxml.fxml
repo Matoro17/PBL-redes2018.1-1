@@ -6,8 +6,9 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sensor.Sensorpk.Sensorxml">
    <children>
-      <Button fx:id="mais"  layoutX="412.0" layoutY="89.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="139.0" text="Aumentar Vazao" />
+      <Button fx:id="mais" layoutX="412.0" layoutY="89.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="139.0" text="Aumentar Vazao" />
       <Button fx:id="menos" layoutX="412.0" layoutY="244.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="139.0" text="Diminuir Vazao" />
       <Label fx:id="labo" layoutX="180.0" layoutY="171.0" prefHeight="59.0" prefWidth="179.0" text="Label" />
+      <Label text="Label" />
    </children>
 </AnchorPane>

@@ -1,34 +1,87 @@
 package Sensor.Sensorpk;
 
-import java.awt.EventQueue;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
-public class Sensor extends Application{
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ResourceBundle;
 
-	
-	public static void main(String[] args) throws InterruptedException {
-		launch(args);
-	}
-	
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("sensorxml.fxml"));
-		primaryStage.setTitle("Sensor");
-		primaryStage.setScene(new Scene(root));
-		primaryStage.show();
-	}
-	
+public class Sensor implements Initializable {
+
+    @FXML
+    public Button mais;
+    @FXML
+    public Button menos;
+    @FXML
+    public Label labo;
+
+    public Integer vazao = 0, vazaoTotalHora = 0,totalvazao = 0;
+    public LocalDateTime data;
+
+    public String local = "localhost";
+    public int porta = 22222;
+    private int codigo = 21, zona = 3;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+       new Thread(() -> {
+           int count = 0;
+           try {
+               DatagramSocket socket = new DatagramSocket();
+               System.out.println(vazaoTotalHora);
+               while (true) {
+                   if (vazao > 0) {
+                       vazaoTotalHora = vazaoTotalHora + vazao;
+                       System.out.println(vazaoTotalHora);
+                       Platform.runLater(() -> {
+                           labo.setText(Integer.toString(vazaoTotalHora));
+                       });
+                   }
+                   Thread.sleep(1000);
+                   count++;
+                   if (count >= 10){
+                       totalvazao = vazaoTotalHora + totalvazao;
+                       vazaoTotalHora = 0;
+                       System.out.println("tentando enviar");
+                       byte[] dados = String.format("%d,%d,%s,%d,%d",codigo,zona, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy,hh:mm")),vazaoTotalHora,totalvazao).getBytes();
+                       socket.send(new DatagramPacket(dados,dados.length,InetAddress.getByName(local),porta));
+                       count=0;
+                   }
+
+               }
+           } catch (IOException | InterruptedException e) {
+
+           }
+
+        }). start();
+
+        mais.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                vazao = vazao + 1;
+            }
+
+        });
+
+        menos.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (vazao > 0) {
+                    vazao = vazao - 1;
+                }
+            }
+
+        });
+    }
 }
