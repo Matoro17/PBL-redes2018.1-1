@@ -26,7 +26,7 @@ public class Sensor implements Initializable {
     @FXML
     public Label labo;
     @FXML
-    public Button textinho;
+    public Label dis;
 
     public Integer vazao = 0, vazaoTotalHora = 0,totalvazao = 0;
     public LocalDateTime data;
@@ -51,7 +51,7 @@ public class Sensor implements Initializable {
                        });
                    }
                    Platform.runLater(() -> {
-                       textinho.setText(Integer.toString(vazao)+ "m³/s");
+                       dis.setText(Integer.toString(vazao)+ "m³/s");
                    });
                    Thread.sleep(1000);
                    count++;

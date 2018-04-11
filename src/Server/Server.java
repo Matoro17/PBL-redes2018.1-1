@@ -25,7 +25,7 @@ public class Server extends Thread {
     private byte[] buffer;
 
     private Medicao data;
-    public Controller control = new Controller(this);
+    public static Controller control;
 
 
     public static void main(String[] args) {
@@ -36,6 +36,7 @@ public class Server extends Thread {
     }
 
     public Server(Socket sock, Controller c){
+        control = new Controller(this);
         conexaoClient = sock;
         control = c;
     }
@@ -67,7 +68,13 @@ public class Server extends Thread {
                Medicao temp = new Medicao(partes[0],partes[1],partes[2],partes[3],partes[4],partes[5]);
 
                System.out.println(temp.getConsumoHora());
-               control.addLeitura(temp);
+               if ( control.getClientes().get(temp.getCodigo()) == null){
+                   System.out.println("Cliente não cadastrado");
+               }
+               else{
+                   control.addLeitura(temp);
+               }
+
                if (checkConsumo(temp.getZona(),temp.getCodigo())){
                    //enviarEmailAlerta(temp.getZona(),temp.getCodigo());
                }

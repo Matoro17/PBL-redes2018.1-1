@@ -5,11 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<<<<<<< HEAD
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sensor.Sensorpk.Sensor">
-=======
 <AnchorPane prefHeight="277.0" prefWidth="506.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sensor.Sensorpk.Sensor">
->>>>>>> 1ed81a11771468dd0880ee701605f7f38e4cb597
    <children>
       <Button fx:id="mais" layoutX="290.0" layoutY="71.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="139.0" text="Aumentar Vazao" />
       <Button fx:id="menos" layoutX="290.0" layoutY="142.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="139.0" text="Diminuir Vazao" />
@@ -23,6 +19,6 @@
             <Font name="System Bold" size="15.0" />
          </font>
       </Label>
-      <Label fx:id="textinho" layoutX="81.0" layoutY="161.0" prefHeight="21.0" prefWidth="99.0" text="..." />
+      <Label fx:id="dis" layoutX="81.0" layoutY="161.0" prefHeight="21.0" prefWidth="99.0" text="..." />
    </children>
 </AnchorPane>
