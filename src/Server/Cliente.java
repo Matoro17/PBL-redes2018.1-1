@@ -27,7 +27,7 @@ public class Cliente {
         Iterator i = cont.iterator();
         while (i.hasNext()){
             Medicao temp = (Medicao) i.next();
-            consumoTotal = consumoTotal + temp.getConsumo();
+            consumoTotal = consumoTotal + temp.getConsumoHora();
         }
         return consumoTotal;
     }

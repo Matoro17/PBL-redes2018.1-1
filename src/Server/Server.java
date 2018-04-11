@@ -66,12 +66,12 @@ public class Server extends Thread {
 
                Medicao temp = new Medicao(partes[0],partes[1],partes[2],partes[3],partes[4],partes[5]);
 
-               System.out.println(temp.getConsumo());
+               System.out.println(temp.getConsumoHora());
                control.addLeitura(temp);
                if (checkConsumo(temp.getZona(),temp.getCodigo())){
                    //enviarEmailAlerta(temp.getZona(),temp.getCodigo());
                }
-               System.out.println(temp.getConsumo());
+               System.out.println(temp.getConsumoHora());
            }
        }catch (IOException e){
 

@@ -25,6 +25,8 @@ public class Sensor implements Initializable {
     public Button menos;
     @FXML
     public Label labo;
+    @FXML
+    public Button textinho;
 
     public Integer vazao = 0, vazaoTotalHora = 0,totalvazao = 0;
     public LocalDateTime data;
@@ -45,9 +47,12 @@ public class Sensor implements Initializable {
                        vazaoTotalHora = vazaoTotalHora + vazao;
                        System.out.println(vazaoTotalHora);
                        Platform.runLater(() -> {
-                           labo.setText(Integer.toString(vazaoTotalHora));
+                           labo.setText(Integer.toString(vazaoTotalHora)+"m³");
                        });
                    }
+                   Platform.runLater(() -> {
+                       textinho.setText(Integer.toString(vazao)+ "m³/s");
+                   });
                    Thread.sleep(1000);
                    count++;
                    if (count >= 10){
