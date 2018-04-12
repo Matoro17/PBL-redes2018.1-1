@@ -5,58 +5,84 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import sun.applet.Main;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ResourceBundle;
 
-public class Clientcontrol extends Application {
-    private Stage primaryStage;
+import static javafx.application.Application.launch;
+
+public class Clientcontrol implements Initializable {
+
 
     @FXML
-    private Button login;
+    private Label info;
     @FXML
-    private TextField clientport;
-    @FXML
-    private TextField clientip;
-    @FXML
-    private TextField clientcode;
+    private Button checkconsumo;
 
+    private ObjectOutputStream saida;
+    private ObjectInputStream entrada;
+    private Socket conexao;
+    private String codigo;
 
+    BufferedReader in;
+    PrintWriter out;
 
+    private String ip = "localhost";
+    private int porta = 12345;
 
-    public static void main(String[] args) throws InterruptedException {
-        launch(args);
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
+
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        this.primaryStage = primaryStage;
-        Parent root = FXMLLoader.load(getClass().getResource("CliLogin.fxml"));
-        primaryStage.setTitle("Cliente");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            conexao = new Socket(ip, porta);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+                 PrintWriter out = new PrintWriter(conexao.getOutputStream(), true)) {
+
+            } catch (IOException e) {
+                e.printStackTrace();
+        }
 
 
 
-        login.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        checkconsumo.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("ClientInterface.fxml"));
-                Client client = loader.getController();
-                client.criarConexao(clientip.getText(),Integer.parseInt(clientport.getText()));
-                client.setCodigo(clientcode.getText());
                 try {
-                    primaryStage.setScene(new Scene(loader.load()));
+                    Socket conexao = new Socket(ip, porta);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+                    PrintWriter out = new PrintWriter(conexao.getOutputStream(), true);
+
+                    out.println("relatorio");
+                    /*String str = in.readLine();
+                    System.out.println("recebeu misera");
+                    info.setText(str);*/
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-
         });
+
     }
 }

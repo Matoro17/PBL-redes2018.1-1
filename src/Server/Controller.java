@@ -8,7 +8,9 @@ public class Controller implements Serializable {
 
     private Server server;
     private static HashMap<Integer, HashMap<Integer,Cliente>> clientes;
-    private static final String PATH = "C:\\Users\\Pichau\\Documents\\GitHub\\PBL-redes2018.1-1\\DB.txt";
+    private static final String PATH = "C:\\Users\\Gabriel\\Documents\\GitHub\\PBL-redes2018.1-1\\DB.txt";
+
+
     public Controller(Server server) throws IOException, ClassNotFoundException {
         this.server = server;
         clientes = new HashMap<Integer, HashMap<Integer, Cliente>>();

@@ -33,7 +33,7 @@ public class Sensor implements Initializable {
 
     public String local = "localhost";
     public int porta = 22222;
-    private int codigo = 21, zona = 3;
+    private int codigo = 1, zona = 1;
 
     public void setup(String local,int porta,int codigo,int zona){
         this.local = local;
@@ -95,5 +95,6 @@ public class Sensor implements Initializable {
             }
 
         });
+
     }
 }

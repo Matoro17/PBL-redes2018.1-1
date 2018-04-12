@@ -38,12 +38,12 @@ public class Sensormain extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Sensor");
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("sensorxml.fxml"));
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
 
-        enviar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        /*enviar.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("sensorxml.fxml"));
@@ -56,7 +56,7 @@ public class Sensormain extends Application {
                 }
             }
 
-        });
+        });*/
 
     }
 

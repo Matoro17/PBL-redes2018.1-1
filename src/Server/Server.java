@@ -1,12 +1,12 @@
 package Server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+
+import java.io.*;
+import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Properties;
@@ -23,43 +23,146 @@ public class Server extends Thread {
     private Socket conexaoClient;
     private DatagramSocket conexaoSensor;
     private byte[] buffer;
-    int porta = 12345;
+    int portaTCP = 12345;
+    int portaUDP = 22222;
     private Medicao data;
     public static Controller control;
 
 
-    public static void main(String[] args) {
 
-
-        new Thread(new Server()).start();
-
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        Server novo = new Server();
+        new Thread(new Server(new Socket(),new Controller(novo))).start();
     }
 
-    public Server(Socket sock, Controller c) throws IOException, ClassNotFoundException {
-        control = new Controller(this);
-        conexaoClient = sock;
-        control = c;
-    }
-    public Server(){
+    public Server() {
+        try {
+            System.out.println("Servidor ativo");
+            System.out.println("IP: " + InetAddress.getLocalHost().getHostAddress());
 
+            String conf[] = Files.lines(Paths.get("conf.txt")).findFirst().get().split(";");
+            portaTCP = Integer.parseInt(conf[0]);
+            portaUDP = Integer.parseInt(conf[1]);
+
+            System.out.println("Porta TCP: " + portaTCP);
+            System.out.println("Porta UDP: " + portaUDP);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void UDPServer(int port, int buffer) throws IOException {
-        this.conexaoSensor = new DatagramSocket(port);
-        this.buffer = new byte[buffer];
+    public void udp() {
+        new Thread(() -> {
+            Controller bd = Controller.getInstance();
+
+            try {
+                DatagramSocket socket = new DatagramSocket(portaUDP);
+                DatagramPacket packet = new DatagramPacket(new byte[1024], 1024);
+
+                while (true) {
+                    socket.receive(packet);
+
+                    try {
+                        Object obj = new ObjectInputStream(new ByteArrayInputStream(packet.getData())).readObject();
+
+                        if (obj instanceof Registro)
+                            bd.salvarRegistro((Registro) obj);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
+
+    public void tcp() {
+        new Thread(() -> {
+            try {
+                ServerSocket serverSocket = new ServerSocket(portaTCP);
+
+                while (true)
+                    new Cliente(serverSocket.accept()).start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private class Cliente extends Thread {
+
+        private Socket socket;
+
+        public Cliente(Socket socket) {
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            BancoDados bd = BancoDados.getInstance();
+
+            try {
+                Object obj = new ObjectInputStream(socket.getInputStream()).readObject();
+
+                if (obj instanceof Consulta)
+                    new ObjectOutputStream(socket.getOutputStream()).writeObject(bd.consultarConsumo((Consulta) obj));
+
+                if (obj instanceof Agendamento)
+                    bd.salvarAgendamento((Agendamento) obj);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void smtp() {
+        new Thread(() -> {
+            BancoDados bd = BancoDados.getInstance();
+
+            try {
+                while (true) {
+                    Thread.sleep(60000);
+
+                    bd.listaEmail().forEach(end -> {
+                        try {
+                            Runtime.getRuntime().exec(
+                                    String.format("python3 %s %s %s %s","email.py", end, "SMCRA", "Limite de consumo atingido"));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
 
 
     @Override
     public void run(){
         try{
-           //ObjectInputStream entrada = new ObjectInputStream(conexaoClient.getInputStream());
-           //ObjectOutputStream saida = new ObjectOutputStream(conexaoClient.getOutputStream());
-           UDPServer(porta,128);
+           UDPServer(portaUDP,128);
            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-           //String a = entrada.readUTF();
+
            while(true){
+               ServerSocket s = new ServerSocket(portaTCP);
+               System.out.println("Esperando conexão de cliente...");
+               conexaoClient = s.accept();
+               System.out.println("conected!");
+
+               BufferedReader in = new BufferedReader(new InputStreamReader(conexaoClient.getInputStream()));
+               PrintWriter out = new PrintWriter(conexaoClient.getOutputStream(), true);
+               System.out.println(in.readLine());
+               /*if(in.readLine().equals("relatorio")){
+                   out.println("tome um relatorio");
+               }*/
                conexaoSensor.receive(packet);
+
+
                System.out.println(new String(packet.getData(), 0, packet.getLength()));
                String jose = new String(packet.getData(), 0, packet.getLength());
                String[] partes = jose.split(",");
@@ -80,9 +183,10 @@ public class Server extends Thread {
                }
                System.out.println(temp.getConsumoHora());
            }
-       }catch (IOException e){
+       } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-       }
     }
 
     public boolean checkConsumo(int zona, int codigo){
@@ -91,23 +195,6 @@ public class Server extends Thread {
         return cli.check();
     }
 
-    public void criarConexao(Controller c, int port) throws ClassNotFoundException {
-        try{
-            ServerSocket s = new ServerSocket(port);
-            while(true){
-                System.out.println("Esperando conexão...");
-                conexaoClient = s.accept();
-                System.out.println("conected!");
-                Thread t = new Server(conexaoClient,c);
-                t.start();
-                
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("IOException: " + e);
-
-        }
-    }
 
     /*
 	public void enviarEmailAlerta(int zona,int codigo){//codigo do cliente que precisa ser notificado
