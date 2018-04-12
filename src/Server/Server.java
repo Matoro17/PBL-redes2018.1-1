@@ -23,19 +23,19 @@ public class Server extends Thread {
     private Socket conexaoClient;
     private DatagramSocket conexaoSensor;
     private byte[] buffer;
-
+    int porta = 12345;
     private Medicao data;
     public static Controller control;
 
 
     public static void main(String[] args) {
 
-        int porta = 47579;
+
         new Thread(new Server()).start();
 
     }
 
-    public Server(Socket sock, Controller c){
+    public Server(Socket sock, Controller c) throws IOException, ClassNotFoundException {
         control = new Controller(this);
         conexaoClient = sock;
         control = c;
@@ -55,7 +55,7 @@ public class Server extends Thread {
         try{
            //ObjectInputStream entrada = new ObjectInputStream(conexaoClient.getInputStream());
            //ObjectOutputStream saida = new ObjectOutputStream(conexaoClient.getOutputStream());
-           UDPServer(22222,128);
+           UDPServer(porta,128);
            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
            //String a = entrada.readUTF();
            while(true){
@@ -91,7 +91,7 @@ public class Server extends Thread {
         return cli.check();
     }
 
-    public void criarConexao(Controller c, int port){
+    public void criarConexao(Controller c, int port) throws ClassNotFoundException {
         try{
             ServerSocket s = new ServerSocket(port);
             while(true){
@@ -100,6 +100,7 @@ public class Server extends Thread {
                 System.out.println("conected!");
                 Thread t = new Server(conexaoClient,c);
                 t.start();
+                
             }
         } catch (IOException e) {
             e.printStackTrace();

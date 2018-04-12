@@ -49,7 +49,11 @@ public class Sensormain extends Application {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("sensorxml.fxml"));
                 Sensor sensor = loader.getController();
                 sensor.setup(ip.getText(),Integer.parseInt(port.getText()),Integer.parseInt(clientcode.getText()),Integer.parseInt(clientzone.getText()));
-
+                try {
+                    primaryStage.setScene(new Scene(loader.load()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         });

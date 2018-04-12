@@ -1,13 +1,22 @@
 package Server;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Cliente {
+public class Cliente implements Serializable {
     private int codigo,zona;
     private int limite,consumo;
     private HashMap<String,HashMap<String, Medicao>> medicoes;// <Data medicao, hash<Hora medicao, medicao daquela hora>>
+    private String nome;
+
+
+    public Cliente(int codigo,int zona, String nome){
+        this.codigo = codigo;
+        this.zona = zona;
+        this.nome = nome;
+    }
 
     public HashMap getMedicoes(){
         return medicoes;

@@ -1,8 +1,9 @@
 package Server;
 
+import java.io.Serializable;
 import java.net.DatagramPacket;
 
-public class Medicao {
+public class Medicao implements Serializable {
     private String data,hora;
     private int codigo,consumoHora, zona,consumototal;
 
