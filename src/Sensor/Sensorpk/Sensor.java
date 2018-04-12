@@ -35,6 +35,13 @@ public class Sensor implements Initializable {
     public int porta = 22222;
     private int codigo = 21, zona = 3;
 
+    public void setup(String local,int porta,int codigo,int zona){
+        this.local = local;
+        this.porta = porta;
+        this.codigo = codigo;
+        this.zona = zona;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
        new Thread(() -> {

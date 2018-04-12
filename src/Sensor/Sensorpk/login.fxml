@@ -8,7 +8,7 @@
 
 <AnchorPane prefHeight="262.0" prefWidth="454.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sensor.Sensorpk.Login">
    <children>
-      <Button layoutX="203.0" layoutY="201.0" mnemonicParsing="false" text="Enviar" />
+      <Button fx:id="enviar" layoutX="203.0" layoutY="201.0" mnemonicParsing="false" text="Enviar" />
       <TextField fx:id="ip" layoutX="54.0" layoutY="98.0" />
       <TextField fx:id="port" layoutX="54.0" layoutY="156.0" />
       <TextField fx:id="clientcode" layoutX="251.0" layoutY="98.0" />
