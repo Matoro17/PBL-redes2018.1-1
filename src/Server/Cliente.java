@@ -8,14 +8,24 @@ import java.util.Iterator;
 public class Cliente implements Serializable {
     private int codigo,zona;
     private int limite,consumo;
+    private String email;
     private HashMap<String,HashMap<String, Medicao>> medicoes;// <Data medicao, hash<Hora medicao, medicao daquela hora>>
     private String nome;
 
 
-    public Cliente(int codigo,int zona, String nome){
+    public Cliente(int codigo,int zona, String nome,String email){
+        this.email = email;
         this.codigo = codigo;
         this.zona = zona;
         this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNome() {
+        return nome;
     }
 
     public HashMap getMedicoes(){

@@ -33,17 +33,27 @@ public class Clientcontrol implements Initializable {
     private Label info;
     @FXML
     private Button checkconsumo;
+    @FXML
+    private TextField clienteip;
+    @FXML
+    private TextField porta;
+    @FXML
+    private TextField clientid;
+    @FXML
+    private TextField clientzone;
+    @FXML
+    private Button sendmeta;
+    @FXML
+    private TextField meta;
+
 
     private ObjectOutputStream saida;
     private ObjectInputStream entrada;
     private Socket conexao;
     private String codigo;
 
-    BufferedReader in;
-    PrintWriter out;
 
-    private String ip = "localhost";
-    private int porta = 12345;
+
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
@@ -52,32 +62,47 @@ public class Clientcontrol implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            conexao = new Socket(ip, porta);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
-                 PrintWriter out = new PrintWriter(conexao.getOutputStream(), true)) {
 
-            } catch (IOException e) {
-                e.printStackTrace();
-        }
+        sendmeta.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                try {
+                    Socket conexao = new Socket(clienteip.getText(), Integer.parseInt(porta.getText()));
+                    ObjectInputStream in = new ObjectInputStream(conexao.getInputStream());
+                    //BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+                    ObjectOutputStream out = new ObjectOutputStream(conexao.getOutputStream());
+                    //PrintWriter out = new PrintWriter(conexao.getOutputStream(), true);
 
-
+                    out.writeUTF("meta,"+clientid.getText()+","+clientzone.getText()+","+meta.getText());
+                    String str = in.readUTF();
+                    System.out.println("recebeu misera");
+                    info.setText(str);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         checkconsumo.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    Socket conexao = new Socket(ip, porta);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
-                    PrintWriter out = new PrintWriter(conexao.getOutputStream(), true);
-
-                    out.println("relatorio");
-                    /*String str = in.readLine();
-                    System.out.println("recebeu misera");
-                    info.setText(str);*/
+                    Socket conexao = new Socket(clienteip.getText(), Integer.parseInt(porta.getText()));
+                    System.out.println("criou conexao");
+                    ObjectInputStream in = new ObjectInputStream(conexao.getInputStream());
+                    System.out.println("fez o in");
+                    //BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
+                    ObjectOutputStream out = new ObjectOutputStream(conexao.getOutputStream());
+                    System.out.println("fez o out");
+                    //PrintWriter out = new PrintWriter(conexao.getOutputStream(), true);
+                    System.out.println("criou os in e out");
+                    out.writeUTF("consulta,"+clientid.getText()+","+clientzone.getText());
+                    System.out.println("tentou escrever para o server");
+                    String str = in.readUTF();
+                    System.out.println("tentou ler oq o server respondeu");
+                    info.setText("recebeu misera");
+                    System.out.println("tentou colocar coisas na label de info");
+                    info.setText(str);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
