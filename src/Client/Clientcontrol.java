@@ -88,19 +88,12 @@ public class Clientcontrol implements Initializable {
             public void handle(MouseEvent event) {
                 try {
                     Socket conexao = new Socket(clienteip.getText(), Integer.parseInt(porta.getText()));
-                    System.out.println("criou conexao");
-                    //ObjectInputStream in = new ObjectInputStream(conexao.getInputStream());
-
-                    //BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
-                    System.out.println("fez o in");
-                    //ObjectOutputStream out = new ObjectOutputStream(conexao.getOutputStream());
                     PrintWriter out = new PrintWriter(conexao.getOutputStream(), true);
-                    System.out.println("fez o out");
-                    System.out.println("criou os in e out");
+
                     out.println("consulta,"+clientid.getText()+","+clientzone.getText());
-                    System.out.println("tentou escrever para o server");
+
                     String obj = new BufferedReader(new InputStreamReader(conexao.getInputStream())).readLine();
-                    //String str = in.readLine();
+
                     System.out.println("tentou ler oq o server respondeu");
                     info.setText("recebeu misera");
                     System.out.println("tentou colocar coisas na label de info");

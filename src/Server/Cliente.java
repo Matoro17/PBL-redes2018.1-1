@@ -25,7 +25,14 @@ public class Cliente implements Serializable {
     public void addMedicoes(Medicao med) {
         if (this.medicoes == null){
             this.medicoes = new HashMap<String,HashMap<String, Medicao>>();
-            medicoes.put(med.getData(), med);
+            HashMap<String, Medicao> nominho = new HashMap<String, Medicao>();
+            nominho.put(med.getTime(),med);
+            medicoes.put(med.getData(), nominho);
+        }
+        else{
+            HashMap<String, Medicao> nominho = new HashMap<String, Medicao>();
+            nominho.put(med.getTime(),med);
+            medicoes.put(med.getData(), nominho);
         }
 
     }

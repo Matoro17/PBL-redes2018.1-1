@@ -30,18 +30,6 @@ public class Controller implements Serializable {
         return instance;
     }
 
-    public Controller(Server server) throws IOException, ClassNotFoundException {
-        this.server = server;
-        clientes = new HashMap<Integer, HashMap<Integer, Cliente>>();
-        try {
-            setField();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     /*
         Seta a base de dados
      */
@@ -93,23 +81,27 @@ public class Controller implements Serializable {
         }
     }
 
-    public void addLeitura(Medicao med) {
+    public void addLeitura(Medicao med) throws IOException {
             clientes.get(med.getZona()).get(med.getCodigo()).addMedicoes(med);
+            saveFile(clientes);
     }
 
     public String consultarConsumo(int id, int zona) {
+        System.out.println(clientes.toString());
         HashMap<String,HashMap<String, Medicao>> medicoescliente = clientes.get(zona).get(id).getMedicoes();
-        String total = "para a zona "+zona+" e Usuario: "+id+"\n";
+        System.out.println(medicoescliente.get("16/04/2018").get("20:53").getConsumototal());
+        String total = "para a zona "+zona+" e Usuario: "+id+"\t";
         for(Map.Entry<String, HashMap<String, Medicao>> entry : medicoescliente.entrySet()) {
             total += "Dia:"+(entry.getKey())+"\t";
-            System.out.println(entry.getValue().get(entry.getKey()));
+            System.out.println(entry.getValue());//está retornando null
+/*
             for(Map.Entry<String, Medicao> entrou : entry.getValue().entrySet()){
                 System.out.println("entrou no entrou do entry");
                 total += "Hora: " + entrou.getKey() + "\t";
                 total += "Consumo Hora: " + entrou.getValue().getConsumoHora() + "\t";
                 total += "Consumo Total: " + entrou.getValue().getConsumototal() + "\t";
-            }
-            total += "\n";
+            }*/
+            total += "\t";
 
             // do what you have to do here
             // In your case, another loop.
@@ -141,5 +133,15 @@ public class Controller implements Serializable {
 
         System.out.println(restored);
     }*/
+
+    public static void main(String args[]) throws IOException {
+        Controller control = new Controller().getInstance();
+        Medicao medida = new Medicao("1","1","10/04/2018","13:00","0","0");
+        control.addLeitura(medida);
+        Medicao medida2 = new Medicao("1","1","16/04/2018","20:53","20","140");
+        control.addLeitura(medida2);
+        System.out.println(control.getClientes().get(1).get(1).getNome());
+        System.out.println(control.consultarConsumo(1,1));
+    }
 
 }

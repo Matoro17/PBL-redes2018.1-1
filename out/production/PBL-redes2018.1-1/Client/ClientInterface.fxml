@@ -4,18 +4,24 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Clientcontrol">
    <children>
       <Label layoutX="27.0" layoutY="27.0" text="Verificar consumo" />
-      <Button fx:id="checkconsumo" layoutX="27.0" layoutY="120.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0" text="Verificar" />
-      <Label fx:id="info" alignment="TOP_LEFT" layoutX="229.0" layoutY="123.0" prefHeight="252.0" prefWidth="347.0" text="Info" />
-      <TextField fx:id="meta" layoutX="27.0" layoutY="215.0" />
-      <Label layoutX="27.0" layoutY="191.0" text="Estipular meta de Consumo" />
-      <Button fx:id="sendmeta" layoutX="27.0" layoutY="254.0" mnemonicParsing="false" text="Enviar" />
+      <Button fx:id="checkconsumo" layoutX="176.0" layoutY="113.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0" text="Mostrar Consumo" />
+      <Label fx:id="info" alignment="TOP_LEFT" layoutX="28.0" layoutY="162.0" prefHeight="213.0" prefWidth="548.0" text="Info" />
+      <TextField fx:id="meta" layoutX="329.0" layoutY="44.0" />
+      <Label layoutX="330.0" layoutY="27.0" text="Estipular meta de Consumo" />
+      <Button fx:id="sendmeta" layoutX="499.0" layoutY="44.0" mnemonicParsing="false" text="Enviar" />
       <TextField fx:id="clienteip" layoutX="27.0" layoutY="44.0" prefHeight="25.0" prefWidth="119.0" promptText="ip" />
       <TextField fx:id="porta" layoutX="27.0" layoutY="80.0" prefHeight="25.0" prefWidth="119.0" promptText="porta" />
       <TextField fx:id="clientid" layoutX="176.0" layoutY="44.0" prefHeight="25.0" prefWidth="119.0" promptText="ID" />
       <TextField fx:id="clientzone" layoutX="176.0" layoutY="80.0" prefHeight="25.0" prefWidth="119.0" promptText="Zona" />
+      <Label layoutX="330.0" layoutY="71.0" text="Necessário todas as informações" textFill="#0000008d">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
