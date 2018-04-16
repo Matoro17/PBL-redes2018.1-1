@@ -94,16 +94,27 @@ public class Controller implements Serializable {
     }
 
     public void addLeitura(Medicao med) {
-
             clientes.get(med.getZona()).get(med.getCodigo()).addMedicoes(med);
-
-
     }
 
     public String consultarConsumo(int id, int zona) {
         HashMap<String,HashMap<String, Medicao>> medicoescliente = clientes.get(zona).get(id).getMedicoes();
-        System.out.println(medicoescliente.toString());
-        return medicoescliente.toString();
+        String total = "para a zona "+zona+" e Usuario: "+id+"\n";
+        for(Map.Entry<String, HashMap<String, Medicao>> entry : medicoescliente.entrySet()) {
+            total += "Dia:"+(entry.getKey())+"\t";
+            System.out.println(entry.getValue().get(entry.getKey()));
+            for(Map.Entry<String, Medicao> entrou : entry.getValue().entrySet()){
+                System.out.println("entrou no entrou do entry");
+                total += "Hora: " + entrou.getKey() + "\t";
+                total += "Consumo Hora: " + entrou.getValue().getConsumoHora() + "\t";
+                total += "Consumo Total: " + entrou.getValue().getConsumototal() + "\t";
+            }
+            total += "\n";
+
+            // do what you have to do here
+            // In your case, another loop.
+        }
+        return total;
 
     }
 

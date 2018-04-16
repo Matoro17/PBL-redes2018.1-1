@@ -9,7 +9,7 @@
    <children>
       <Label layoutX="27.0" layoutY="27.0" text="Verificar consumo" />
       <Button fx:id="checkconsumo" layoutX="27.0" layoutY="120.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="119.0" text="Verificar" />
-      <Label fx:id="info" layoutX="357.0" layoutY="199.0" prefHeight="176.0" prefWidth="219.0" text="Info" />
+      <Label fx:id="info" alignment="TOP_LEFT" layoutX="229.0" layoutY="123.0" prefHeight="252.0" prefWidth="347.0" text="Info" />
       <TextField fx:id="meta" layoutX="27.0" layoutY="215.0" />
       <Label layoutX="27.0" layoutY="191.0" text="Estipular meta de Consumo" />
       <Button fx:id="sendmeta" layoutX="27.0" layoutY="254.0" mnemonicParsing="false" text="Enviar" />

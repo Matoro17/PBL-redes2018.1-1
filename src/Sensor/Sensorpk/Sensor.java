@@ -32,7 +32,7 @@ public class Sensor implements Initializable {
     public LocalDateTime data;
 
     public String local = "192.168.1.8";
-    public int porta = 1141;
+    public int porta = 1145;
     private int codigo = 1, zona = 1;
 
     public void setup(String local,int porta,int codigo,int zona){

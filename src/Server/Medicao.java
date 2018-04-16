@@ -31,6 +31,11 @@ public class Medicao extends HashMap<String, Medicao> implements Serializable {
 
     }
 
+    public int getConsumototal() {
+        return consumototal;
+    }
+
+
     public String getData() {
         return data;
     }

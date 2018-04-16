@@ -9,8 +9,8 @@ import javax.mail.PasswordAuthentication;
 import java.util.Properties;
 
 public class Server extends Thread {
-    int portaTCP = 1140;
-    int portaUDP = 1141;
+    int portaTCP = 1144;
+    int portaUDP = 1145;
 
 
 
@@ -58,7 +58,7 @@ public class Server extends Thread {
 
                     Medicao temp = new Medicao(partes[0],partes[1],partes[2],partes[3],partes[4],partes[5]);
 
-                    System.out.println(temp.getConsumoHora());
+                    System.out.println(temp.getConsumototal());
                     if ( bd.getClientes().get(temp.getCodigo()) == null){
                         System.out.println("Cliente não cadastrado");
                     }
@@ -111,7 +111,7 @@ public class Server extends Thread {
                     PrintWriter printa = new PrintWriter(socket.getOutputStream(),true);
                     System.out.println(bd.consultarConsumo(Integer.parseInt(spitonhim[1]), Integer.parseInt(spitonhim[2])));
                     printa.println(bd.consultarConsumo(Integer.parseInt(spitonhim[1]), Integer.parseInt(spitonhim[2])));
-                    System.out.println("finalizou o if");
+
                 }
                 else if (spitonhim[0].equals("meta")){
                     bd.setMeta(Integer.parseInt(spitonhim[1]),Integer.parseInt(spitonhim[2]),Integer.parseInt(spitonhim[3]));
