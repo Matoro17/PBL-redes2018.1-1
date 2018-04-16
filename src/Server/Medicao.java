@@ -2,8 +2,9 @@ package Server;
 
 import java.io.Serializable;
 import java.net.DatagramPacket;
+import java.util.HashMap;
 
-public class Medicao implements Serializable {
+public class Medicao extends HashMap<String, Medicao> implements Serializable {
     private String data,hora;
     private int codigo,consumoHora, zona,consumototal;
 

@@ -9,8 +9,8 @@ import javax.mail.PasswordAuthentication;
 import java.util.Properties;
 
 public class Server extends Thread {
-    int portaTCP = 12345;
-    int portaUDP = 22222;
+    int portaTCP = 1140;
+    int portaUDP = 1141;
 
 
 
@@ -27,7 +27,17 @@ public class Server extends Thread {
 
             System.out.println("Porta TCP: " + portaTCP);
             System.out.println("Porta UDP: " + portaUDP);
+            Controller bd = Controller.getInstance();
+            if (bd.setField()){
+                System.out.println("Controller leu os arquivos de usuário");
+                System.out.println( bd.getClientes().toString());
+            }
+            else{
+                System.out.println("sem arquivos lidos");
+            }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -55,7 +65,8 @@ public class Server extends Thread {
                     else{
                         bd.addLeitura(temp);
                         if (bd.checkConsumo(temp.getZona(),temp.getCodigo())){
-                            enviarEmailAlerta(temp.getZona(),temp.getCodigo());
+                            System.out.println("Bateu a meta de consumo");
+                            //enviarEmailAlerta(temp.getZona(),temp.getCodigo());
                         }
                     }
                 }
@@ -91,14 +102,21 @@ public class Server extends Thread {
             Controller bd = Controller.getInstance();
 
             try {//lembrando que o padrão de entrada de metas é: " Pedido, id, zona, meta"
-                String obj = new ObjectInputStream(socket.getInputStream()).readUTF();
+
+                String obj = new BufferedReader(new InputStreamReader(socket.getInputStream())).readLine();
                 String[] spitonhim = obj.split(",");
-                if (spitonhim[0].equals("consulta"))
-                    new ObjectOutputStream(socket.getOutputStream()).writeUTF(bd.consultarConsumo(Integer.parseInt(spitonhim[1]),Integer.parseInt(spitonhim[2])));
+                System.out.println(spitonhim[0]);
+                if (spitonhim[0].equals("consulta")) {
+
+                    PrintWriter printa = new PrintWriter(socket.getOutputStream(),true);
+                    System.out.println(bd.consultarConsumo(Integer.parseInt(spitonhim[1]), Integer.parseInt(spitonhim[2])));
+                    printa.println(bd.consultarConsumo(Integer.parseInt(spitonhim[1]), Integer.parseInt(spitonhim[2])));
+                    System.out.println("finalizou o if");
+                }
                 else if (spitonhim[0].equals("meta")){
                     bd.setMeta(Integer.parseInt(spitonhim[1]),Integer.parseInt(spitonhim[2]),Integer.parseInt(spitonhim[3]));
                 }
-
+                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

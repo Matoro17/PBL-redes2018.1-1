@@ -1,5 +1,7 @@
 package Server;
 
+import com.sun.applet2.AppletParameters;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,6 +22,14 @@ public class Cliente implements Serializable {
         this.nome = nome;
     }
 
+    public void addMedicoes(Medicao med) {
+        if (this.medicoes == null){
+            this.medicoes = new HashMap<String,HashMap<String, Medicao>>();
+            medicoes.put(med.getData(), med);
+        }
+
+    }
+
     public String getEmail() {
         return email;
     }
@@ -33,6 +43,10 @@ public class Cliente implements Serializable {
     }
 
     public boolean check(){
+        if (limite == 0){
+            return false;
+        }
+
         if (consumoMensal() >= limite){
             return true;
         }

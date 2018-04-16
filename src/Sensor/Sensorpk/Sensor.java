@@ -31,8 +31,8 @@ public class Sensor implements Initializable {
     public Integer vazao = 0, vazaoTotalHora = 0,totalvazao = 0;
     public LocalDateTime data;
 
-    public String local = "localhost";
-    public int porta = 22222;
+    public String local = "192.168.1.8";
+    public int porta = 1141;
     private int codigo = 1, zona = 1;
 
     public void setup(String local,int porta,int codigo,int zona){

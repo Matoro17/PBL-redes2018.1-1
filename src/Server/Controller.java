@@ -7,8 +7,8 @@ import java.util.Map;
 public class Controller implements Serializable {
 
     private Server server;
-    private static HashMap<Integer, HashMap<Integer, Cliente>> clientes;
-    private static final String PATH = "C:\\Users\\Gabriel\\Documents\\GitHub\\PBL-redes2018.1-1\\DB.txt";
+    private static HashMap<Integer, HashMap<Integer, Cliente>> clientes;//\
+    private static final String PATH = System.getProperty("user.dir") + "/" + "DB.txt";
 
     private static Controller instance;
 
@@ -18,6 +18,14 @@ public class Controller implements Serializable {
     public static Controller getInstance() {
         if (instance == null) {
             instance = new Controller();
+            clientes = new HashMap<Integer, HashMap<Integer, Cliente>>();
+            try {
+                instance.setField();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         return instance;
     }
@@ -37,15 +45,21 @@ public class Controller implements Serializable {
     /*
         Seta a base de dados
      */
-    public void setField() throws IOException, ClassNotFoundException {
+    public boolean setField() throws IOException, ClassNotFoundException {
         try {
             clientes = readFile();
+            if (clientes != null){
+                return true;
+            }
+            else{
+                return false;
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return false;
     }
 
 
@@ -81,12 +95,14 @@ public class Controller implements Serializable {
 
     public void addLeitura(Medicao med) {
 
-        HashMap<Integer, Cliente> temp = clientes.get(med.getZona());
-        temp.get(med.getCodigo()).getMedicoes().put(med.getData(), med.getTime());
+            clientes.get(med.getZona()).get(med.getCodigo()).addMedicoes(med);
+
+
     }
 
     public String consultarConsumo(int id, int zona) {
-        HashMap medicoescliente = clientes.get(zona).get(id).getMedicoes();
+        HashMap<String,HashMap<String, Medicao>> medicoescliente = clientes.get(zona).get(id).getMedicoes();
+        System.out.println(medicoescliente.toString());
         return medicoescliente.toString();
 
     }
