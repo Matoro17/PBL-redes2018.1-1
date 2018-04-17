@@ -55,7 +55,8 @@ public class Controller implements Serializable {
         Checa se o cliente atingiu o consumo
      */
     public boolean checkConsumo(int zona, int codigo) {
-        HashMap<Integer, Cliente> clientes = getClientes().get(zona);
+        Controller control = new Controller().getInstance();
+        HashMap<Integer, Cliente> clientes = control.getClientes().get(zona);
         Cliente cli = clientes.get(codigo);
         return cli.check();
     }
@@ -87,24 +88,20 @@ public class Controller implements Serializable {
     }
 
     public String consultarConsumo(int id, int zona) {
-        System.out.println(clientes.toString());
         HashMap<String,HashMap<String, Medicao>> medicoescliente = clientes.get(zona).get(id).getMedicoes();
-        System.out.println(medicoescliente.get("16/04/2018").get("20:53").getConsumototal());
-        String total = "para a zona "+zona+" e Usuario: "+id+"\t";
+        String total = "para a zona "+zona+" e Usuario: "+id+";";
         for(Map.Entry<String, HashMap<String, Medicao>> entry : medicoescliente.entrySet()) {
-            total += "Dia:"+(entry.getKey())+"\t";
+            total += "Dia:"+(entry.getKey())+";";
             System.out.println(entry.getValue());//está retornando null
-/*
-            for(Map.Entry<String, Medicao> entrou : entry.getValue().entrySet()){
-                System.out.println("entrou no entrou do entry");
-                total += "Hora: " + entrou.getKey() + "\t";
-                total += "Consumo Hora: " + entrou.getValue().getConsumoHora() + "\t";
-                total += "Consumo Total: " + entrou.getValue().getConsumototal() + "\t";
-            }*/
-            total += "\t";
 
-            // do what you have to do here
-            // In your case, another loop.
+            for(Map.Entry<String, Medicao> entrou : entry.getValue().entrySet()){
+                total += "Hora: " + entrou.getKey() + "\t";
+                total += "Leitura: " + entrou.getValue().getConsumoHora() + "cm³\t";
+                total += "Total: " + entrou.getValue().getConsumototal() + "cm³\t";
+                total += ";";
+            }
+            total += ";";
+
         }
         return total;
 
@@ -134,6 +131,9 @@ public class Controller implements Serializable {
         System.out.println(restored);
     }*/
 
+// Main para adição de medicoes do usuário um
+/*
+
     public static void main(String args[]) throws IOException {
         Controller control = new Controller().getInstance();
         Medicao medida = new Medicao("1","1","10/04/2018","13:00","0","0");
@@ -142,6 +142,6 @@ public class Controller implements Serializable {
         control.addLeitura(medida2);
         System.out.println(control.getClientes().get(1).get(1).getNome());
         System.out.println(control.consultarConsumo(1,1));
-    }
+    }*/
 
 }

@@ -2,23 +2,33 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="277.0" prefWidth="506.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Sensor.Sensorpk.Sensor">
    <children>
-      <Button fx:id="mais" layoutX="290.0" layoutY="71.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="139.0" text="Aumentar Vazao" />
-      <Button fx:id="menos" layoutX="290.0" layoutY="142.0" mnemonicParsing="false" prefHeight="59.0" prefWidth="139.0" text="Diminuir Vazao" />
-      <Label fx:id="labo" layoutX="81.0" layoutY="100.0" prefHeight="21.0" prefWidth="99.0" text="..." />
-      <Label layoutX="81.0" layoutY="79.0" text="Total de Consumo">
+      <Button fx:id="mais" layoutX="330.0" layoutY="172.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="139.0" text="Aumentar Vazao" />
+      <Button fx:id="menos" layoutX="330.0" layoutY="221.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="139.0" text="Diminuir Vazao" />
+      <Label fx:id="labo" layoutX="148.0" layoutY="228.0" prefHeight="21.0" prefWidth="99.0" text="..." />
+      <Label layoutX="148.0" layoutY="196.0" text="Total de Consumo">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></Label>
-      <Label layoutX="81.0" layoutY="139.0" text="Vazão atual">
+      <Label layoutX="14.0" layoutY="196.0" text="Vazão atual">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Label>
-      <Label fx:id="dis" layoutX="81.0" layoutY="161.0" prefHeight="21.0" prefWidth="99.0" text="..." />
+      <Label fx:id="dis" layoutX="14.0" layoutY="217.0" prefHeight="21.0" prefWidth="99.0" text="..." />
+      <TextField fx:id="ipsensor" layoutX="14.0" layoutY="36.0" prefHeight="21.0" prefWidth="139.0" />
+      <TextField fx:id="portasensor" layoutX="166.0" layoutY="36.0" prefHeight="31.0" prefWidth="139.0" />
+      <TextField fx:id="zonasensor" layoutX="14.0" layoutY="108.0" prefHeight="31.0" prefWidth="139.0" />
+      <TextField fx:id="idsensor" layoutX="166.0" layoutY="108.0" prefHeight="31.0" prefWidth="139.0" />
+      <Button fx:id="start" layoutX="333.0" layoutY="39.0" mnemonicParsing="false" prefHeight="95.0" prefWidth="128.0" text="START" />
+      <Label layoutX="14.0" layoutY="14.0" text="IP" />
+      <Label layoutX="166.0" layoutY="14.0" text="Porta" />
+      <Label layoutX="14.0" layoutY="87.0" text="Zona" />
+      <Label layoutX="167.0" layoutY="87.0" text="ID" />
    </children>
 </AnchorPane>

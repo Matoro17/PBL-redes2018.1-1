@@ -65,7 +65,7 @@ public class Server extends Thread {
                     else{
                         bd.addLeitura(temp);
                         if (bd.checkConsumo(temp.getZona(),temp.getCodigo())){
-                            System.out.println("Bateu a meta de consumo");
+                            System.out.println("Cliente ID: "+temp.getCodigo()+"Bateu a meta de consumo");
                             //enviarEmailAlerta(temp.getZona(),temp.getCodigo());
                         }
                     }

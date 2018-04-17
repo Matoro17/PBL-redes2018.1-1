@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -30,7 +31,7 @@ public class Clientcontrol implements Initializable {
 
 
     @FXML
-    private Label info;
+    private TextArea info;
     @FXML
     private Button checkconsumo;
     @FXML
@@ -68,15 +69,9 @@ public class Clientcontrol implements Initializable {
             public void handle(MouseEvent event) {
                 try {
                     Socket conexao = new Socket(clienteip.getText(), Integer.parseInt(porta.getText()));
-                    ObjectInputStream in = new ObjectInputStream(conexao.getInputStream());
-                    //BufferedReader in = new BufferedReader(new InputStreamReader(conexao.getInputStream()));
-                    ObjectOutputStream out = new ObjectOutputStream(conexao.getOutputStream());
-                    //PrintWriter out = new PrintWriter(conexao.getOutputStream(), true);
-
-                    out.writeUTF("meta,"+clientid.getText()+","+clientzone.getText()+","+meta.getText());
-                    String str = in.readUTF();
-                    System.out.println("recebeu misera");
-                    info.setText(str);
+                    PrintWriter out = new PrintWriter(conexao.getOutputStream(), true);
+                    out.write("meta,"+clientid.getText()+","+clientzone.getText()+","+meta.getText());
+                    info.appendText("\nMeta enviada\n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -93,12 +88,16 @@ public class Clientcontrol implements Initializable {
                     out.println("consulta,"+clientid.getText()+","+clientzone.getText());
 
                     String obj = new BufferedReader(new InputStreamReader(conexao.getInputStream())).readLine();
-
-                    System.out.println("tentou ler oq o server respondeu");
-                    info.setText("recebeu misera");
-                    System.out.println("tentou colocar coisas na label de info");
-                    info.setText(obj);
                     conexao.close();
+                    String[] dividida = obj.split(";");
+                    String vai = "";
+                    for (int i = 0; i<dividida.length ; i++){
+                        vai += dividida[i] + "\n";
+                    }
+                    info.setText(vai);
+
+
+
                 } catch (IOException e) {
                     e.printStackTrace();
 

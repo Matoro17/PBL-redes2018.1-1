@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
@@ -27,6 +28,17 @@ public class Sensor implements Initializable {
     public Label labo;
     @FXML
     public Label dis;
+    @FXML
+    public TextField ipsensor;
+    @FXML
+    public TextField portasensor;
+    @FXML
+    public TextField zonasensor;
+    @FXML
+    public TextField idsensor;
+    @FXML
+    public Button start;
+
 
     public Integer vazao = 0, vazaoTotalHora = 0,totalvazao = 0;
     public LocalDateTime data;
@@ -44,39 +56,52 @@ public class Sensor implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-       new Thread(() -> {
-           int count = 0;
-           try {
-               DatagramSocket socket = new DatagramSocket();
-               System.out.println(vazaoTotalHora);
-               while (true) {
-                   if (vazao > 0) {
-                       vazaoTotalHora = vazaoTotalHora + vazao;
-                       System.out.println(vazaoTotalHora);
-                       Platform.runLater(() -> {
-                           labo.setText(Integer.toString(vazaoTotalHora)+"m³");
-                       });
-                   }
-                   Platform.runLater(() -> {
-                       dis.setText(Integer.toString(vazao)+ "m³/s");
-                   });
-                   Thread.sleep(1000);
-                   count++;
-                   if (count >= 10){
-                       totalvazao = vazaoTotalHora + totalvazao;
-                       vazaoTotalHora = 0;
-                       System.out.println("tentando enviar");
-                       byte[] dados = String.format("%d,%d,%s,%d,%d",codigo,zona, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy,hh:mm")),vazaoTotalHora,totalvazao).getBytes();
-                       socket.send(new DatagramPacket(dados,dados.length,InetAddress.getByName(local),porta));
-                       count=0;
-                   }
+        start.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-               }
-           } catch (IOException | InterruptedException e) {
 
-           }
+            @Override
+            public void handle(MouseEvent event) {
+                porta = Integer.parseInt(portasensor.getText());
+                local = ipsensor.getText();
+                codigo = Integer.parseInt(idsensor.getText());
+                zona = Integer.parseInt(zonasensor.getText());
 
-        }). start();
+                new Thread(() -> {
+                    int count = 0;
+                    try {
+                        DatagramSocket socket = new DatagramSocket();
+                        System.out.println(vazaoTotalHora);
+                        while (true) {
+                            if (vazao > 0) {
+                                vazaoTotalHora = vazaoTotalHora + vazao;
+                                System.out.println(vazaoTotalHora);
+                                Platform.runLater(() -> {
+                                    labo.setText(Integer.toString(vazaoTotalHora)+"cm³");
+                                });
+                            }
+                            Platform.runLater(() -> {
+                                dis.setText(Integer.toString(vazao)+ "cm³/s");
+                            });
+                            Thread.sleep(1000);
+                            count++;
+                            if (count >= 10){
+                                totalvazao = vazaoTotalHora + totalvazao;
+                                vazaoTotalHora = 0;
+                                System.out.println("tentando enviar");
+                                byte[] dados = String.format("%d,%d,%s,%d,%d",codigo,zona, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy,hh:mm")),vazaoTotalHora,totalvazao).getBytes();
+                                socket.send(new DatagramPacket(dados,dados.length,InetAddress.getByName(local),porta));
+                                count=0;
+                            }
+
+                        }
+                    } catch (IOException | InterruptedException e) {
+
+                    }
+
+                }). start();
+            }
+        });
+
 
         mais.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
