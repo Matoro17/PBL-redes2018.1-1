@@ -63,7 +63,9 @@ public class Clientcontrol implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        /**
+         * Botão para envio de meta de consumo
+         */
         sendmeta.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -77,7 +79,9 @@ public class Clientcontrol implements Initializable {
                 }
             }
         });
-
+        /**
+         * Botão para pedir ao servidor a listagem do consumo do usuário
+         */
         checkconsumo.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

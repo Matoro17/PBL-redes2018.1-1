@@ -15,6 +15,10 @@ public class Controller implements Serializable {
     private Controller() {
     }
 
+    /**
+     * Retorna uma instancia do controller para evitar multiplas instancias do mesmo
+     * @return
+     */
     public static Controller getInstance() {
         if (instance == null) {
             instance = new Controller();
@@ -30,8 +34,11 @@ public class Controller implements Serializable {
         return instance;
     }
 
-    /*
-        Seta a base de dados
+    /**
+     * Usadao para quando o servidor é carregado para pegar o arquivo do banco de dados e deixá-lo carergado no sistema
+     * @return
+     * @throws IOException
+     * @throws ClassNotFoundException
      */
     public boolean setField() throws IOException, ClassNotFoundException {
         try {
@@ -51,8 +58,11 @@ public class Controller implements Serializable {
     }
 
 
-    /*
-        Checa se o cliente atingiu o consumo
+    /**
+     * Faz a checagem se o usuário atingiu seu consumo
+     * @param zona
+     * @param codigo
+     * @return
      */
     public boolean checkConsumo(int zona, int codigo) {
         Controller control = new Controller().getInstance();
@@ -61,20 +71,33 @@ public class Controller implements Serializable {
         return cli.check();
     }
 
+    /**
+     * Insere a meta num cliente pelo seu ID, e zona
+     * @param id
+     * @param zone
+     * @param meta
+     */
     public void setMeta(int id, int zone, int meta) {
         clientes.get(zone).get(id).setLimite(meta);
     }
 
 
-    //Savar base de dados
+    /**
+     * salva as alterações ou o arquivo carregado do programa no texto
+     * @param users
+     * @throws IOException
+     */
     public static void saveFile(HashMap<Integer, HashMap<Integer, Cliente>> users) throws IOException {
         try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(PATH))) {
             os.writeObject(users);
         }
     }
 
-    /*
-        Ler arquivo da base de dados
+    /**
+     * Lê o arquivo do banco para recuperar os clientes e leituras
+     * @return
+     * @throws ClassNotFoundException
+     * @throws IOException
      */
     public static HashMap<Integer, HashMap<Integer, Cliente>> readFile() throws ClassNotFoundException, IOException {
         try (ObjectInputStream is = new ObjectInputStream(new FileInputStream(PATH))) {
@@ -82,11 +105,22 @@ public class Controller implements Serializable {
         }
     }
 
+    /**
+     * Adiciona uma leitura no banco de dados
+     * @param med   Medição que por si só já conteem id e zona do seu usuário
+     * @throws IOException
+     */
     public void addLeitura(Medicao med) throws IOException {
             clientes.get(med.getZona()).get(med.getCodigo()).addMedicoes(med);
             saveFile(clientes);
     }
 
+    /**
+     * Metodo para mostrar o total de consumo de todos os dias de um determinado usuário em sua zona
+     * @param id    ID do usuário
+     * @param zona  Zona do usuário
+     * @return  Retorna uma Palavra que conteem todas as totais letiruas de cada dia deste usuário, com virgulas para serem tratadas como quebra de linha pelo cliente
+     */
     public String consultarConsumo(int id, int zona) {
         HashMap<String,HashMap<String, Medicao>> medicoescliente = clientes.get(zona).get(id).getMedicoes();
         String total = "para a zona "+zona+" e Usuario: "+id+";";
@@ -107,6 +141,10 @@ public class Controller implements Serializable {
 
     }
 
+    /**
+     * Retorna todos os clientes
+     * @return
+     */
     public HashMap<Integer, HashMap<Integer, Cliente>> getClientes() {
         return clientes;
     }

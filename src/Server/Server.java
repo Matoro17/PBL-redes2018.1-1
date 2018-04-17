@@ -20,6 +20,9 @@ public class Server extends Thread {
         servidor.tcp();
     }
 
+    /**
+     * Inicio do Server
+     */
     public Server() {
         try {
             System.out.println("Servidor ativo");
@@ -42,6 +45,9 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Metodo de execução das Thread UDP
+     */
     public void udp() {
         new Thread(() -> {
             Controller bd = Controller.getInstance();
@@ -76,6 +82,9 @@ public class Server extends Thread {
         }).start();
     }
 
+    /**
+     * Metodo de execução das Thread TCP
+     */
     public void tcp() {
         new Thread(() -> {
             try {
@@ -89,6 +98,9 @@ public class Server extends Thread {
         }).start();
     }
 
+    /**
+     * Classe Cliente para ser chamada como uma Thread e ser executada como a mesma
+     */
     private class Cliente extends Thread {
 
         private Socket socket;
@@ -123,7 +135,11 @@ public class Server extends Thread {
         }
     }
 
-
+    /**
+     * Envia um e-mail de alerta para o Usuário da Zona e ID passados como parâmetro
+     * @param zona  Zona do Usuário
+     * @param codigo    Id do usuário
+     */
 	public void enviarEmailAlerta(int zona,int codigo) {//codigo do cliente que precisa ser notificado
 
         Properties props = new Properties();
@@ -147,14 +163,14 @@ public class Server extends Thread {
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("seuemail@gmail.com")); //Remetente
+            message.setFrom(new InternetAddress("dora@outlook.com")); //Remetente
 
             Address[] toUser = InternetAddress //Destinatário(s)
                     .parse("seuamigo@gmail.com, seucolega@hotmail.com, seuparente@yahoo.com.br");
 
             message.setRecipients(Message.RecipientType.TO, toUser);
-            message.setSubject("Enviando email com JavaMail");//Assunto
-            message.setText("Enviei este email utilizando JavaMail com minha conta GMail!");
+            message.setSubject("Aviso de Consumo de água");//Assunto
+            message.setText("Você bateu sua meta de consumo, cuidado!");
             /**Método para enviar a mensagem criada*/
             Transport.send(message);
 

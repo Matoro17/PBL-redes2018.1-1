@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Sensor">
+    <output-path>$PROJECT_DIR$/out/artifacts/Sensor</output-path>
+    <root id="archive" name="PBL-redes2018.1-1.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/sensor/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="PBL-redes2018.1-1" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/javax.mail.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

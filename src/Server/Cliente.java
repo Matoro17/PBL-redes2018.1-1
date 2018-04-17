@@ -22,6 +22,10 @@ public class Cliente implements Serializable {
         this.nome = nome;
     }
 
+    /**
+     * Insere uma medição nova na hashmap do clilente para as mesmas
+     * @param med
+     */
     public void addMedicoes(Medicao med) {
         if (this.medicoes == null){
             this.medicoes = new HashMap<String,HashMap<String, Medicao>>();
@@ -49,11 +53,14 @@ public class Cliente implements Serializable {
         return medicoes;
     }
 
+    /**
+     * Checagem de consumo e meta
+     * @return
+     */
     public boolean check(){
         if (limite == 0){
             return false;
         }
-
         if (consumoMensal() >= limite){
             return true;
         }
@@ -61,6 +68,11 @@ public class Cliente implements Serializable {
             return false;
         }
     }
+
+    /**
+     * Metodo para averiguar o consumo mensal
+     * @return
+     */
     public int consumoMensal(){
         int consumoTotal = 0;
         Collection cont = this.medicoes.values();
